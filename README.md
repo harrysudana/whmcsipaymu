@@ -6,7 +6,7 @@ Ini adalah WHMCS gateway module menggunakan IPAYMU sebagai payment gateway
 ## Instalasi:
 Copy file ipaymu.php ke folder modules/gateways/ipaymu.php
 
-Copy file ipaymu.php ke folder modules/gateways/callback/ipaymu.php
+Copy file callback/ipaymu.php ke folder modules/gateways/callback/ipaymu.php
 
 
 ##Tentang
