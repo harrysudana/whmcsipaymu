@@ -2,6 +2,10 @@ whmcsipaymu
 ===========
 Ini adalah WHMCS gateway module menggunakan IPAYMU sebagai payment gateway
 
+#Donasi
+[Donasi 100RB](https://my.ipaymu.com/process.htm?product=1287&member=harrysudana&action=donation&send=yes) - 
+[Donasi 500RB](https://my.ipaymu.com/process.htm?product=1289&member=harrysudana&action=donation&send=yes)
+
 
 ## Instalasi:
 Copy file ipaymu.php ke folder modules/gateways/ipaymu.php
