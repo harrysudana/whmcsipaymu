@@ -8,6 +8,7 @@ Copy file ipaymu.php ke folder modules/gateways/ipaymu.php
 
 Copy file callback/ipaymu.php ke folder modules/gateways/callback/ipaymu.php
 
+Pada Setup > Payments > Payment Gateways di area WHMCS administrator, silahkan aktivasi dengan memilih IPAYMU Module serta konfigurasi agar dapat berjalan dengan normal
 
 ##Tentang
 #WHMCS
@@ -32,3 +33,10 @@ Website: [https://ipaymu.com](https://my.ipaymu.com?rid=harrysudana)
 
 #License
 http://www.gnu.org/licenses/gpl.html
+
+
+#Donasi
+[Donasi 100RB](https://my.ipaymu.com/process.htm?product=1287&member=harrysudana&action=donation&send=yes)
+
+[Donasi 500RB](https://my.ipaymu.com/process.htm?product=1289&member=harrysudana&action=donation&send=yes)
+
