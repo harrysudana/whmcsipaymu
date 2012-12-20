@@ -40,16 +40,14 @@ if($_GET['method']=="cancel"){
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dibatalkan');
 }elseif( $_GET['method']=="notify" ){
-	logTransaction($GATEWAY["name"],$_POST,__LINE__.":Catch from IPAYMU");
+	
 
 	if($_POST["status"]<>"berhasil"){
 		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Tidak Berhasil");
 	}else{
-		
+		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Catch from IPAYMU");
 		$invoiceid = $_GET["id"];
-		$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
-		checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
-		$params = array('ipaymu_apikey'=>$_GET['apikey']);
+		$parameters = array('ipaymu_apikey'=>$_GET['apikey']);
 		
 		if(isset($_POST['paypal_trx_id'])){
 			$rate = $_POST["total"] / $_POST['paypal_trx_total'];
@@ -67,10 +65,12 @@ if($_GET['method']=="cancel"){
 			$fee = 0;//$_POST["x_fee"];
 
 		}
-
+		
+		$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
+		checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
 
 		if ($transid<>"") {
-			$ipaymutrx = ipaymu_cektransaksi($params, $transid);
+			$ipaymutrx = ipaymu_cektransaksi($parameters, $transid);
 			logTransaction($GATEWAY["name"],$ipaymutrx,__LINE__.":Cek for IPAYMU Transaction");
 			if(!$ipaymutrx){
 				//header('HTTP/1.1 200 OK');
