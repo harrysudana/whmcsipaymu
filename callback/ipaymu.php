@@ -39,7 +39,7 @@ if($_GET['method']=="cancel"){
 	logTransaction($GATEWAY["name"],$_GET,"Cancelled"); # Save to Gateway Log: name, data array, status
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dibatalkan');
-}elseif($_GET['method']=="notify"){
+}elseif($_GET['method']=="notify" || $_GET['method']=="return" ){
 
 	if(isset($_POST['paypal_trx_id'])){
 		$rate = $_POST["total"] / $_POST['paypal_trx_total'];
@@ -94,6 +94,7 @@ if($_GET['method']=="cancel"){
 	}
 
 }else{
+	$invoiceid = $_GET["id"];
 	header('HTTP/1.1 400 Bad Request');
 	logTransaction($GATEWAY["name"],$_GET,"Returned");
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
