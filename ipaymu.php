@@ -72,7 +72,7 @@ function ipaymu_link($params) {
 		'price'=>$amount,
 		'comments'=>$description,
 		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return&id='.$invoiceid,
-		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid,
+		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid.'&apikey='.$gatewayipaymuapikey,
 		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
 		'paypal_enabled'=>$gatewaypaypalenabled,
 		'paypal_email'=>$gatewaypaypalemail,
@@ -150,7 +150,7 @@ function ipaymu_cektransaksi($params, $trx_id){
 	$request = ipaymu_curl($url, $parameters);
 
 	if($request['status']){
-		return json_decode($request, true);
+		return json_decode($request['rawdata'], true);
 	}else{
 		return FALSE;
 	}
