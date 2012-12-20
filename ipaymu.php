@@ -84,7 +84,7 @@ function ipaymu_link($params) {
 	}else{
 		$price_usd = $amount / $gatewaypaypalcurconvert;
 	}
-	
+
 	# Enter your code submit to the gateway...
 	$data = array(
 		'api_key'=>$gatewayipaymuapikey,
@@ -298,7 +298,6 @@ function ipaymu_refund($params) {
 	} else {
 		return array("status"=>"error","rawdata"=>$results);
 	}
-
 }
 
 ?>
