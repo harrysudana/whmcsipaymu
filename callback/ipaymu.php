@@ -76,7 +76,7 @@ if($_GET['method']=="cancel"){
 				//header('HTTP/1.1 200 OK');
 				//header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 				exit(__LINE__.': Curl Error!');
-			}elseif($ipaymutrx['status']=="Berhasil"){
+			}elseif($ipaymutrx['status']==1){
 				# Successful
 				addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
 				logTransaction($GATEWAY["name"],array('return'=>json_encode($_POST), 'ipaymu'=>json_encode($ipaymutrx)), __LINE__.":Successful"); # Save to Gateway Log: name, data array, status
