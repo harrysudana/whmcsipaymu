@@ -68,11 +68,11 @@ function ipaymu_link($params) {
 	# Enter your code submit to the gateway...
 	$data = array(
 		'api_key'=>$gatewayipaymuapikey,
-		'product'=>$invoiceid,
+		'product'=>'INVOICE #'.$invoiceid,
 		'price'=>$amount,
 		'comments'=>$description,
 		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return&id='.$invoiceid,
-		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify',
+		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid,
 		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
 		'paypal_enabled'=>$gatewaypaypalenabled,
 		'paypal_email'=>$gatewaypaypalemail,

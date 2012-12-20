@@ -40,7 +40,6 @@ if($_GET['method']=="cancel"){
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dibatalkan');
 }elseif($_GET['method']=="notify" || $_GET['method']=="return" ){
-
 	if(isset($_POST['paypal_trx_id'])){
 		$rate = $_POST["total"] / $_POST['paypal_trx_total'];
 		//$status = $_POST["x_response_code"];
@@ -64,6 +63,7 @@ if($_GET['method']=="cancel"){
 
 	if ($transid<>"") {
 		$ipaymutrx = ipaymu_cektransaksi($params, $transid);
+		print_r($ipaymutrx);exit();
 		if(!$ipaymutrx){
 			header('HTTP/1.1 200 OK');
 			header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
@@ -79,12 +79,12 @@ if($_GET['method']=="cancel"){
 			logTransaction($GATEWAY["name"],array('return'=>$_POST, 'ipaymu'=>$ipaymutrx), __LINE__.":Successful"); # Save to Gateway Log: name, data array, status
 			header('HTTP/1.1 200 OK');
 			header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
-			exit();
+			exit(__LINE__.': Successful');
 		}else{
 			logTransaction($GATEWAY["name"],array('return'=>$_POST, 'ipaymu'=>$ipaymutrx), __LINE__.":Successful with payment pending"); # Save to Gateway Log: name, data array, status
 			header('HTTP/1.1 200 OK');
 			header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
-			exit();
+			exit(__LINE__.":Successful with payment pending");
 		}
 	} else {
 		header('HTTP/1.1 400 Bad Request');
