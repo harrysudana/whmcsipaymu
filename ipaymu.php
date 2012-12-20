@@ -92,7 +92,7 @@ function ipaymu_link($params) {
 		'price'=>$amount,
 		'comments'=>$description,
 		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return&id='.$invoiceid,
-		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid.'&apikey='.$gatewayipaymuapikey,
+		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid.'&total='.$amount.'&apikey='.$gatewayipaymuapikey,
 		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
 		'paypal_enabled'=>$gatewaypaypalenabled,
 		'paypal_email'=>$gatewaypaypalemail,

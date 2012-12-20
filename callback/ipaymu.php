@@ -46,6 +46,11 @@ if($_GET['method']=="cancel"){
 		$parameters = array('ipaymu_apikey'=>$_GET['apikey']);
 		if(isset($_POST['paypal_trx_id'])){
 			$transid = $_POST["paypal_trx_id"];
+			if($_POST["total"] == $_POST["paypal_trx_total"]){
+				$amount = $_GET["total"];
+			}else{
+				$amount = $_POST["total"];
+			}
 			$amount = $_POST["total"];
 			$fee = 0;
 			addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
