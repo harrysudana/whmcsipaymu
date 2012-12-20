@@ -54,14 +54,14 @@ if($_GET['method']=="cancel"){
 		if(isset($_POST['paypal_trx_id'])){
 			$rate = $_POST["total"] / $_POST['paypal_trx_total'];
 			//$status = $_POST["x_response_code"];
-			$invoiceid = $_POST["product"];
+			//$invoiceid = $_POST["product"];
 			$transid = $_POST["paypal_trx_id"];
 			$amount = $_POST["total"];
 			$fee = $_POST["paypal_trx_fee"] * $rate;
 
 		}else{
 			//$status = $_POST["x_response_code"];
-			$invoiceid = $_POST["product"];
+			//$invoiceid = $_POST["product"];
 			$transid = $_POST["trx_id"];
 			$amount = $_POST["total"];
 			$fee = 0;//$_POST["x_fee"];
