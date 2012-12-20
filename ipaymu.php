@@ -71,7 +71,7 @@ function ipaymu_link($params) {
 		'product'=>$invoiceid,
 		'price'=>$amount,
 		'comments'=>$description,
-		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return',
+		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return&id='.$invoiceid,
 		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify',
 		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
 		'paypal_enabled'=>$gatewaypaypalenabled,

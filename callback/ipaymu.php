@@ -57,7 +57,8 @@ if($_GET['method']=="cancel"){
 		$fee = 0;//$_POST["x_fee"];
 
 	}
-
+	
+	$invoiceid = $_GET["id"];
 	$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
 	checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
 
