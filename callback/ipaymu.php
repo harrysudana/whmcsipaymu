@@ -51,7 +51,7 @@ if($_GET['method']=="cancel"){
 			}else{
 				$amount = $_POST["total"];
 			}
-			$amount = $_POST["total"];
+			
 			$fee = 0;
 			addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
 			logTransaction($GATEWAY["name"], $_POST, __LINE__.":Successful using Paypal trough IPAYMU"); # Save to Gateway Log: name, data array, status
