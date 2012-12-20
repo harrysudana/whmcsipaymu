@@ -81,7 +81,7 @@ function ipaymu_link($params) {
 	);
 	$result = ipaymu_generateurl($data);
 	if($result['status']==TRUE){
-		if($result["paypal_enabled"])
+		if($gatewaypaypalenabled)
 		$code = "<a href='".$result["rawdata"]."'><img src='https://my.ipaymu.com/images/buttons/shopcart/01.png' alt='Bayar Sekarang' title='Bayar Sekarang' ></a>";
 		else
 		$code = "<a href='".$result["rawdata"]."'><img src='https://my.ipaymu.com/images/buttons/shopcart/02.png' alt='Bayar Sekarang' title='Bayar Sekarang' ></a>";
@@ -116,13 +116,12 @@ function ipaymu_generateurl($data){
 	if($data['paypal_enabled']){
 		$parameters = array_merge($parameters, array(
             'paypal_email'   => $data['paypal_email'],
-            'paypal_price'   => $data['price_usd'], // Total harga dalam kurs USD
+            'paypal_price'   => number_format($data['price_usd'], 2, ',',''), // Total harga dalam kurs USD
             'invoice_number' => $data['invoice_id'], // Optional
 		));
-
 	}
 	/* ----------------------------------------------- */
-
+//print_r($parameters);
 	$request = ipaymu_curl($url, $parameters);
 
 	if($request['status']){
