@@ -61,7 +61,7 @@ if($_GET['method']=="cancel"){
 		}else{
 			$transid = $_POST["trx_id"];
 			$amount = $_POST["total"];
-			$fee = $_POST["total"] * (1/100);
+			$fee = 0;//$_POST["total"] * (1/100);
 		}
 
 		$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
