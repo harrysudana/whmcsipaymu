@@ -1,6 +1,6 @@
 <?php
 /*
- * This is WHMCS module using IPAYMU payment gateway   
+ * This is WHMCS module using IPAYMU payment gateway
  * Author : Harry Sudana
  * URL : http://github.com/harrysudana/whmcsipaymu
  * Release Date: 2012.12.20
@@ -26,7 +26,7 @@ function ipaymu_config() {
 "ipaymu_apikey" => array("FriendlyName" => "API Key", "Type" => "text", "Size" => "50", ),
 "paypal_enabled" => array("FriendlyName" => "Module Paypal", "Type" => "yesno", "Description" => "Pilih untuk aktifkan. Anda harus aktifkan juga modul paypal di IPAYMU", ),
 "paypal_email" => array("FriendlyName" => "Paypal Email", "Type" => "text", "Size" => "20", ),
-"paypal_curconvert" => array("FriendlyName" => "Convertion rate 1USD = ? IDR", "Type" => "text", "Size" => "20", ),
+"paypal_curconvert" => array("FriendlyName" => "Kurs USD", "Type" => "text", "Size" => "20", "Description" =>"Jika menggunaan satu kurs mata uang.",),
 	/*"transmethod" => array("FriendlyName" => "Transaction Method", "Type" => "dropdown", "Options" => "Option1,Value2,Method3", ),
 	 "instructions" => array("FriendlyName" => "Payment Instructions", "Type" => "textarea", "Rows" => "5", "Description" => "Do this then do that etc...", ),
 	 "testmode" => array("FriendlyName" => "Test Mode", "Type" => "yesno", "Description" => "Tick this to test", ),*/
@@ -65,6 +65,26 @@ function ipaymu_link($params) {
 	$systemurl = $params['systemurl'];
 	$currency = $params['currency'];
 
+	if(isset($params['convertto'])){
+		$command = "getcurrencies";
+		$adminuser =  $params["username"];
+		$values["code"] = "USD";
+		$results = (localAPI($command,$values,$adminuser));
+		$current_currency_rate = 1;
+		if($results['result']=='success'){
+			for($i=0;$i<$results['totalresults'];$i++){
+				if($results['currencies']['currency'][$i]['code']==$currency){
+					$current_currency_rate = $results['currencies']['currency'][$i]['rate'];
+				}elseif($results['currencies']['currency'][$i]['code']==$values["code"]){
+					$usd_currency_rate = $results['currencies']['currency'][$i]['rate'];
+				}
+			}
+		}
+		$price_usd = ($amount / $current_currency_rate) * $usd_currency_rate;
+	}else{
+		$price_usd = $amount / $gatewaypaypalcurconvert;
+	}
+	
 	# Enter your code submit to the gateway...
 	$data = array(
 		'api_key'=>$gatewayipaymuapikey,
@@ -76,7 +96,7 @@ function ipaymu_link($params) {
 		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
 		'paypal_enabled'=>$gatewaypaypalenabled,
 		'paypal_email'=>$gatewaypaypalemail,
-		'price_usd'=>$amount/$gatewaypaypalcurconvert,
+		'price_usd'=>$price_usd,
 		'invoice_id'=>$invoiceid,
 	);
 	$result = ipaymu_generateurl($data);
@@ -88,7 +108,7 @@ function ipaymu_link($params) {
 	}else{
 		$code = "<p>".$result['rawdata']."</p>";
 	}
-	
+
 	return $code;
 }
 
@@ -116,20 +136,20 @@ function ipaymu_generateurl($data){
 	if($data['paypal_enabled']){
 		$parameters = array_merge($parameters, array(
             'paypal_email'   => $data['paypal_email'],
-            'paypal_price'   => number_format($data['price_usd'], 2, ',',''), // Total harga dalam kurs USD
+            'paypal_price'   => number_format($data['price_usd'], 2), // Total harga dalam kurs USD
             'invoice_number' => $data['invoice_id'], // Optional
 		));
 	}
 	/* ----------------------------------------------- */
-//print_r($parameters);
+	//print_r($parameters);
 	$request = ipaymu_curl($url, $parameters);
 
 	if($request['status']){
 		$result = json_decode($request['rawdata'], true);
 		if( isset($result['url']) )
-			return array('status'=>TRUE, 'rawdata'=>$result['url']);
+		return array('status'=>TRUE, 'rawdata'=>$result['url']);
 		else
-			return array('status'=>FALSE, 'rawdata'=>"Request Error ". $result['Status'] .": ". $result['Keterangan']);
+		return array('status'=>FALSE, 'rawdata'=>"Request Error ". $result['Status'] .": ". $result['Keterangan']);
 	}else{
 		return array('status'=>FALSE, 'rawdata'=>$request['rawdata']);
 	}

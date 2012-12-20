@@ -40,7 +40,7 @@ if($_GET['method']=="cancel"){
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dibatalkan');
 }elseif( $_GET['method']=="notify" ){
-	
+
 
 	if($_POST["status"]<>"berhasil"){
 		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Tidak Berhasil");
@@ -48,23 +48,25 @@ if($_GET['method']=="cancel"){
 		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Catch from IPAYMU");
 		$invoiceid = $_GET["id"];
 		$parameters = array('ipaymu_apikey'=>$_GET['apikey']);
-		
-		if(isset($_POST['paypal_trx_id'])){
-			$rate = $_POST["total"] / $_POST['paypal_trx_total'];
-			$transid = $_POST["paypal_trx_id"];
-			$amount = $_POST["total"];
-			$fee = $_POST["paypal_trx_fee"] * $rate;
 
+		if(isset($_POST['paypal_trx_id'])){
+			//$rate = $_POST["total"] / $_POST['paypal_trx_total'];
+			$transid = $_POST["paypal_trx_id"];
+			$amount = $_POST["total"];//$_POST["paypal_trx_total"];
+			$fee = 0;//$_POST["paypal_trx_fee"];
+			addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
+			logTransaction($GATEWAY["name"], $_POST, __LINE__.":Successful using Paypal trough IPAYMU"); # Save to Gateway Log: name, data array, status
+			header('HTTP/1.1 200 OK');
+			exit(__LINE__.': Successful using Paypal trough IPAYMU');
 		}else{
 			$transid = $_POST["trx_id"];
 			$amount = $_POST["total"];
 			$fee = $_POST["total"] * (1/100);
-
 		}
-		
+
 		$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
 		checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
-		
+
 		if ($transid<>"") {
 			$ipaymutrx = ipaymu_cektransaksi($parameters, $transid);
 			logTransaction($GATEWAY["name"],$ipaymutrx,__LINE__.":Cek for IPAYMU Transaction");
