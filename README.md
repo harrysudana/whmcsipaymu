@@ -17,6 +17,9 @@ Pada Setup > Payments > Payment Gateways di area WHMCS administrator, silahkan a
 ## Update Informasi
 Silahkan [daftar disini](http://eepurl.com/tc0In) untuk mendapatkan pembaharuan ***penting***
 
+## Feedback
+Untuk diskusi silahkan berkunjung ke [Feedback Forum](http://harrysudana.uservoice.com/forums/188273-whmcs-ipaymu) 
+
 ##Tentang
 #WHMCS
 The Complete Client Management, Billing & Support Solution
