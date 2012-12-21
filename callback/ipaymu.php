@@ -30,17 +30,22 @@ $gatewaymodule = "ipaymu";
 $GATEWAY = getGatewayVariables($gatewaymodule);
 if (!$GATEWAY["type"]) die("Module Not Activated"); # Checks gateway module is active before accepting callback
 $systemURL = ($CONFIG['SystemSSLURL'] ? $CONFIG['SystemSSLURL'] : $CONFIG['SystemURL']);
+$log = $_GET["log"]=='on' ? TRUE : FALSE;
+
 if($_GET['method']=="cancel"){
 	$invoiceid = $_GET["id"];
 	$invoiceid = checkCbInvoiceID($invoiceid,$GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
 	header('HTTP/1.1 200 OK');
+	if($log)
 	logTransaction($GATEWAY["name"],$_GET,__LINE__.":Transaksi dibatalkan"); # Save to Gateway Log: name, data array, status
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dibatalkan');
 }elseif( $_GET['method']=="notify" ){
 	if($_POST["status"]<>"berhasil"){
+		if($log)
 		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Tidak Berhasil");
 	}else{
+		if($log)
 		logTransaction($GATEWAY["name"],$_POST,__LINE__.":Catch from IPAYMU");
 		$invoiceid = $_GET["id"];
 		$parameters = array('ipaymu_apikey'=>$_GET['apikey']);
@@ -51,9 +56,10 @@ if($_GET['method']=="cancel"){
 			}else{
 				$amount = $_POST["total"];
 			}
-			
+
 			$fee = 0;
 			addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
+			if($log)
 			logTransaction($GATEWAY["name"], $_POST, __LINE__.":Successful using Paypal trough IPAYMU"); # Save to Gateway Log: name, data array, status
 			header('HTTP/1.1 200 OK');
 			exit(__LINE__.': Successful using Paypal trough IPAYMU');
@@ -66,6 +72,7 @@ if($_GET['method']=="cancel"){
 		checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
 		if ($transid<>"") {
 			$ipaymutrx = ipaymu_cektransaksi($parameters, $transid);
+			if($log)
 			logTransaction($GATEWAY["name"],$ipaymutrx,__LINE__.":Cek for IPAYMU Transaction");
 			if(!$ipaymutrx){
 				header('HTTP/1.1 200 OK');
@@ -73,10 +80,12 @@ if($_GET['method']=="cancel"){
 			}elseif($ipaymutrx['Status']==1){
 				# Successful
 				addInvoicePayment($invoiceid,$transid,$amount,$fee,$gatewaymodule); # Apply Payment to Invoice: invoiceid, transactionid, amount paid, fees, modulename
+				if($log)
 				logTransaction($GATEWAY["name"],array('return'=>json_encode($_POST), 'ipaymu'=>json_encode($ipaymutrx)), __LINE__.":Successful"); # Save to Gateway Log: name, data array, status
 				header('HTTP/1.1 200 OK');
 				exit(__LINE__.': Successful');
 			}else{
+				if($log)
 				logTransaction($GATEWAY["name"],array('return'=>json_encode($_POST), 'ipaymu'=>json_encode($ipaymutrx)), __LINE__.":Successful tapi masih".$ipaymutrx['Status']); # Save to Gateway Log: name, data array, status
 				header('HTTP/1.1 200 OK');
 				exit(__LINE__.":Successful with payment pending");
@@ -84,6 +93,7 @@ if($_GET['method']=="cancel"){
 		} else {
 			header('HTTP/1.1 400 Bad Request');
 			# Unsuccessful
+			if($log)
 			logTransaction($GATEWAY["name"],$_POST,__LINE__.":Tidak menemukan transaksi"); # Save to Gateway Log: name, data array, status
 			exit(__LINE__.':Tidak menemukan transaksi');
 		}
@@ -91,6 +101,7 @@ if($_GET['method']=="cancel"){
 }else{
 	$invoiceid = $_GET["id"];
 	header('HTTP/1.1 200 OK');
+	if($log)
 	logTransaction($GATEWAY["name"],$_GET,__LINE__.":Returned");
 	header("Location: {$systemURL}/viewinvoice.php?id={$invoiceid}");
 	exit(__LINE__.': Transaksi dikembalikan');

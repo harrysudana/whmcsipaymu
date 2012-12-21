@@ -14,6 +14,9 @@ Copy file callback/ipaymu.php ke folder modules/gateways/callback/ipaymu.php
 
 Pada Setup > Payments > Payment Gateways di area WHMCS administrator, silahkan aktivasi dengan memilih IPAYMU Module serta konfigurasi agar dapat berjalan dengan normal
 
+## Security
+Untuk keamanan harap mengganti nama file ipaymu.php pada folder modules/gateways/callback serta menyesuaikannya di konfigurasi IPAYMU Payment Gateways
+
 ## Update Informasi
 Silahkan [daftar disini](http://eepurl.com/tc0In) untuk mendapatkan pembaharuan ***penting***
 

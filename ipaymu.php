@@ -21,12 +21,15 @@
 
 function ipaymu_config() {
 	$configarray = array(
-     "FriendlyName" => array("Type" => "System", "Value"=>"IPAYMU Module"),
-     "ipaymu_username" => array("FriendlyName" => "Login ID", "Type" => "text", "Size" => "50", ),
-"ipaymu_apikey" => array("FriendlyName" => "API Key", "Type" => "text", "Size" => "50", ),
-"paypal_enabled" => array("FriendlyName" => "Module Paypal", "Type" => "yesno", "Description" => "Pilih untuk aktifkan. Anda harus aktifkan juga modul paypal di IPAYMU", ),
-"paypal_email" => array("FriendlyName" => "Paypal Email", "Type" => "text", "Size" => "20", ),
-"paypal_curconvert" => array("FriendlyName" => "Kurs USD", "Type" => "text", "Size" => "20", "Description" =>"Jika menggunaan satu kurs mata uang.",),
+    "FriendlyName" => array("Type" => "System", "Value"=>"IPAYMU Module"),
+    "ipaymu_username" => array("FriendlyName" => "Login ID", "Type" => "text", "Size" => "50", ),
+	"ipaymu_apikey" => array("FriendlyName" => "API Key", "Type" => "text", "Size" => "50", ),
+	"ipaymu_log" => array("FriendlyName" => "Gateway Log", "Type" => "yesno", "Description" => "Pilih untuk aktifkan log di Gateway Log", ),
+	"ipaymu_callbackfile" => array("FriendlyName" => "Callback filename", "Type" => "text", "Size" => "20", "Description" => "Nama file di folder modules/gateways/callback", "Value"=>"ipaymu.php", ),
+	"paypal_enabled" => array("FriendlyName" => "Module Paypal", "Type" => "yesno", "Description" => "Pilih untuk aktifkan. Anda harus aktifkan juga modul paypal di IPAYMU", ),
+	"paypal_email" => array("FriendlyName" => "Paypal Email", "Type" => "text", "Size" => "20", ),
+	"paypal_curconvert" => array("FriendlyName" => "Kurs USD", "Type" => "text", "Size" => "20", "Description" =>"Jika menggunaan satu kurs mata uang.",),
+
 	/*"transmethod" => array("FriendlyName" => "Transaction Method", "Type" => "dropdown", "Options" => "Option1,Value2,Method3", ),
 	 "instructions" => array("FriendlyName" => "Payment Instructions", "Type" => "textarea", "Rows" => "5", "Description" => "Do this then do that etc...", ),
 	 "testmode" => array("FriendlyName" => "Test Mode", "Type" => "yesno", "Description" => "Tick this to test", ),*/
@@ -38,6 +41,8 @@ function ipaymu_link($params) {
 	# Gateway Specific Variables
 	$gatewayipaymuusername = $params['ipaymu_username'];
 	$gatewayipaymuapikey = $params['ipaymu_apikey'];
+	$gatewayipaymulog = $params['ipaymu_log'];
+	$gatewayipaymucallbackfile = $params['ipaymu_callbackfile'];
 	$gatewaypaypalenabled = $params['paypal_enabled'];
 	$gatewaypaypalemail = $params['paypal_email'];
 	$gatewaypaypalcurconvert = $params['paypal_curconvert'];
@@ -91,14 +96,15 @@ function ipaymu_link($params) {
 		'product'=>'INVOICE #'.$invoiceid,
 		'price'=>$amount,
 		'comments'=>$description,
-		'url_return'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=return&id='.$invoiceid,
-		'url_notify'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=notify&id='.$invoiceid.'&total='.$amount.'&apikey='.$gatewayipaymuapikey,
-		'url_cancel'=>$systemurl.'/modules/gateways/callback/ipaymu.php?method=cancel&id='.$invoiceid,
+		'url_return'=>$systemurl.'/modules/gateways/callback/'.$gatewayipaymucallbackfile.'?method=return&id='.$invoiceid.'&log='.$gatewayipaymulog,
+		'url_notify'=>$systemurl.'/modules/gateways/callback/'.$gatewayipaymucallbackfile.'?method=notify&id='.$invoiceid.'&total='.$amount.'&apikey='.$gatewayipaymuapikey.'&log='.$gatewayipaymulog,
+		'url_cancel'=>$systemurl.'/modules/gateways/callback/'.$gatewayipaymucallbackfile.'?method=cancel&id='.$invoiceid.'&log='.$gatewayipaymulog,
 		'paypal_enabled'=>$gatewaypaypalenabled,
 		'paypal_email'=>$gatewaypaypalemail,
 		'price_usd'=>$price_usd,
 		'invoice_id'=>$invoiceid,
 	);
+
 	$result = ipaymu_generateurl($data);
 	if($result['status']==TRUE){
 		if($gatewaypaypalenabled)
