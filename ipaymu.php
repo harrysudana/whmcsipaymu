@@ -211,7 +211,7 @@ function ipaymu_curl($url, $parameters){
  * ipaymu_capture << ignored
  *
  */
-function ipaymu_capture($params) {
+function ipaymu_capture_none($params) {
 
 	# Gateway Specific Variables
 	$gatewayusername = $params['username'];
@@ -261,7 +261,7 @@ function ipaymu_capture($params) {
  * ipaymu_refund << ignored
  *
  */
-function ipaymu_refund($params) {
+function ipaymu_refund_none($params) {
 
 	# Gateway Specific Variables
 	$gatewayusername = $params['username'];
