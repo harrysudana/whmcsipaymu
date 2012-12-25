@@ -206,57 +206,6 @@ function ipaymu_curl($url, $parameters){
 	return $result;
 }
 
-
-/*
- * ipaymu_capture << ignored
- *
- */
-function ipaymu_capture_none($params) {
-
-	# Gateway Specific Variables
-	$gatewayusername = $params['username'];
-	$gatewaytestmode = $params['testmode'];
-
-	# Invoice Variables
-	$invoiceid = $params['invoiceid'];
-	$amount = $params['amount']; # Format: ##.##
-	$currency = $params['currency']; # Currency Code
-
-	# Client Variables
-	$firstname = $params['clientdetails']['firstname'];
-	$lastname = $params['clientdetails']['lastname'];
-	$email = $params['clientdetails']['email'];
-	$address1 = $params['clientdetails']['address1'];
-	$address2 = $params['clientdetails']['address2'];
-	$city = $params['clientdetails']['city'];
-	$state = $params['clientdetails']['state'];
-	$postcode = $params['clientdetails']['postcode'];
-	$country = $params['clientdetails']['country'];
-	$phone = $params['clientdetails']['phonenumber'];
-
-	# Card Details
-	$cardtype = $params['cardtype'];
-	$cardnumber = $params['cardnum'];
-	$cardexpiry = $params['cardexp']; # Format: MMYY
-	$cardstart = $params['cardstart']; # Format: MMYY
-	$cardissuenum = $params['cardissuenum'];
-
-	# Perform Transaction Here & Generate $results Array, eg:
-	$results = array();
-	$results["status"] = "success";
-	$results["transid"] = "12345";
-
-	# Return Results
-	if ($results["status"]=="success") {
-		return array("status"=>"success","transid"=>$results["transid"],"rawdata"=>$results);
-	} elseif ($gatewayresult=="declined") {
-		return array("status"=>"declined","rawdata"=>$results);
-	} else {
-		return array("status"=>"error","rawdata"=>$results);
-	}
-
-}
-
 /*
  * ipaymu_refund << ignored
  *
